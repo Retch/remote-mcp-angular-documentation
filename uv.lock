@@ -1839,6 +1839,7 @@ dependencies = [
     { name = "fastmcp" },
     { name = "langchain-community" },
     { name = "langchain-ollama" },
+    { name = "pydantic" },
     { name = "qdrant-client" },
     { name = "structlog" },
 ]
@@ -1854,6 +1855,7 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=3.1.1" },
     { name = "langchain-community", specifier = ">=0.4.1" },
     { name = "langchain-ollama", specifier = ">=1.0.1" },
+    { name = "pydantic", specifier = ">=2.12.5" },
     { name = "qdrant-client", specifier = ">=1.17.1" },
     { name = "structlog", specifier = ">=25.5.0" },
 ]
