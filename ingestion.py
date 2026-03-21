@@ -55,7 +55,7 @@ log.info(f"Chunks: {len(chunks)}")
 created_at = datetime.now(UTC)
 texts = [chunk.page_content for chunk in chunks]
 embeddings = []
-for text in tqdm(texts[:100], desc="Ollama Embeddings"):
+for text in tqdm(texts, desc="Ollama Embeddings"):
     emb = embeddings_model.embed_query(text)
     embeddings.append(emb)
 
