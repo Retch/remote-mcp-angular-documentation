@@ -1,0 +1,19 @@
+[QDRANT]
+url = "http://localhost:6333"
+collection_name = "angular_documentation"
+
+[EMBEDDING]
+model = "qwen3-embedding:0.6b"
+base_url = "http://localhost:11437"
+
+[DOCUMENT_PROCESSING]
+source_file = "./llms-full.txt"
+chunk_size = 1000
+chunk_overlap = 200
+
+[RETRIEVAL]
+min_score = 0.3
+docs_limit = 5
+
+[MCPSERVER]
+port = 8000

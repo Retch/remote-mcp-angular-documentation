@@ -1,31 +1,36 @@
 from qdrant_client import QdrantClient
 from langchain_ollama import OllamaEmbeddings
 from type_definitions.retrieved_doc import RetrievedDoc
+import tomllib
 
-client = QdrantClient(url="http://localhost:6333")
+with open("config.toml", "rb") as f:
+    config = tomllib.load(f)
+
+client = QdrantClient(url=config["QDRANT"]["url"])
 
 embeddings_model = OllamaEmbeddings(
-    model="qwen3-embedding:0.6b",
-    base_url="http://localhost:11437"
+    model=config["EMBEDDING"]["model"], base_url=config["EMBEDDING"]["base_url"]
 )
 
-def find_docs(query: str, min_score: float = 0.3, docs_limit: int = 5) -> list[RetrievedDoc]:
+def find_docs(
+    query: str,
+    min_score: float = config["RETRIEVAL"]["min_score"],
+    docs_limit: int = config["RETRIEVAL"]["docs_limit"],
+) -> list[RetrievedDoc]:
     query_vector = embeddings_model.embed_query(query)
 
     results = client.query_points(
-        collection_name="angular_documentation",
+        collection_name=config["QDRANT"]["collection_name"],
         query=query_vector,
-        limit=docs_limit
+        limit=docs_limit,
     )
 
-    filtered_results = [
-        p for p in results.points
-        if p.score >= min_score
-    ]
+    filtered_results = [p for p in results.points if p.score >= min_score]
 
     filtered_docs: list[RetrievedDoc] = []
 
     for p in filtered_results:
-        doc: RetrievedDoc = RetrievedDoc(text=p.payload.get("text"), score=p.score)
+        text = p.payload["text"] if p.payload else ""
+        doc: RetrievedDoc = RetrievedDoc(text=text, score=p.score)
         filtered_docs.append(doc)
     return filtered_docs
