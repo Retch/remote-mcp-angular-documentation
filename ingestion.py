@@ -4,6 +4,7 @@ from langchain_ollama import OllamaEmbeddings
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, Filter, FilterSelector, VectorParams, PointStruct
 import structlog
+from tqdm import tqdm
 
 qdrant = QdrantClient(url="http://localhost:6333")
 collection_name = "angular_documentation"
@@ -43,8 +44,11 @@ chunks = markdown_splitter.split_documents(docs)
 
 log.info(f"Chunks: {len(chunks)}")
 
-texts = [chunk.page_content for chunk in chunks[:50]]
-embeddings = embeddings_model.embed_documents(texts)
+texts = [chunk.page_content for chunk in chunks]
+embeddings = []
+for text in tqdm(texts, desc="Ollama Embeddings"):
+    emb = embeddings_model.embed_query(text)
+    embeddings.append(emb)
 
 points = [
     PointStruct(
