@@ -43,7 +43,7 @@ chunks = markdown_splitter.split_documents(docs)
 
 log.info(f"Chunks: {len(chunks)}")
 
-texts = [chunk.page_content for chunk in chunks[:1]]
+texts = [chunk.page_content for chunk in chunks[:50]]
 embeddings = embeddings_model.embed_documents(texts)
 
 points = [
