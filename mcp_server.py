@@ -6,7 +6,7 @@ import structlog
 log = structlog.get_logger()
 mcp = FastMCP("Angular Documentation MCP Server")
 
-@mcp.tool
+@mcp.tool(description="Search angular documentation by query which may be words and sentences.")
 def search_docs(query: str) -> list[str]:
     log.info(f"Asking retriever for query: {query}")
     retrieved_docs: list[RetrievedDoc] = Retriever.find_docs(query)
