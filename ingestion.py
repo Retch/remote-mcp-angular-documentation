@@ -5,11 +5,13 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, Filter, FilterSelector, VectorParams, PointStruct
 import structlog
 from tqdm import tqdm
+from datetime import datetime, UTC
 
 qdrant = QdrantClient(url="http://localhost:6333")
 collection_name = "angular_documentation"
 log = structlog.get_logger()
-loader = TextLoader("./llms-full.txt")
+source_file = "./llms-full.txt"
+loader = TextLoader(source_file)
 docs = loader.load()
 embeddings_model = OllamaEmbeddings(
     model="qwen3-embedding:0.6b",
@@ -44,9 +46,10 @@ chunks = markdown_splitter.split_documents(docs)
 
 log.info(f"Chunks: {len(chunks)}")
 
+created_at = datetime.now(UTC)
 texts = [chunk.page_content for chunk in chunks]
 embeddings = []
-for text in tqdm(texts, desc="Ollama Embeddings"):
+for text in tqdm(texts[:100], desc="Ollama Embeddings"):
     emb = embeddings_model.embed_query(text)
     embeddings.append(emb)
 
@@ -54,7 +57,11 @@ points = [
     PointStruct(
         id=i,
         vector=embeddings[i],
-        payload={"text": texts[i]}
+        payload={
+            "text": texts[i],
+            "source": source_file,
+            "created_at": created_at
+        }
     )
     for i in range(len(embeddings))
 ]
