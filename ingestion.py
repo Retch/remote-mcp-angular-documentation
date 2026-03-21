@@ -46,7 +46,6 @@ log.info(f"Chunks: {len(chunks)}")
 texts = [chunk.page_content for chunk in chunks[:1]]
 embeddings = embeddings_model.embed_documents(texts)
 
-
 points = [
     PointStruct(
         id=i,
