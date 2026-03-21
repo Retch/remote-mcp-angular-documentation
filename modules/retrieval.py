@@ -9,7 +9,7 @@ embeddings_model = OllamaEmbeddings(
     base_url="http://localhost:11437"
 )
 
-def find_docs(query: str, min_score: float = 0.4, docs_limit: int = 5) -> list[RetrievedDoc]:
+def find_docs(query: str, min_score: float = 0.3, docs_limit: int = 5) -> list[RetrievedDoc]:
     query_vector = embeddings_model.embed_query(query)
 
     results = client.query_points(
