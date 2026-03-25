@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 
     min_score: float = 0.3
     docs_limit: int = 5
+    min_doc_length: int = 5
 
     fastmcp_port: int = 8000
 
