@@ -5,6 +5,8 @@ from type_definitions.retrieved_doc import RetrievedDoc
 
 client = QdrantClient(url=settings.qdrant_url)
 
+search_count = 0
+
 embeddings_model = OllamaEmbeddings(
     model=settings.embedding_model, base_url=settings.embedding_base_url
 )
@@ -15,6 +17,8 @@ def find_docs(
     docs_limit: int = settings.docs_limit,
     min_doc_length: int = settings.min_doc_length,
 ) -> list[RetrievedDoc]:
+    global search_count
+    search_count += 1
     query_vector = embeddings_model.embed_query(query)
 
     results = client.query_points(
@@ -36,3 +40,12 @@ def find_docs(
         doc: RetrievedDoc = RetrievedDoc(text=text, score=p.score)
         filtered_docs.append(doc)
     return filtered_docs
+
+
+def get_metrics() -> dict:
+    global search_count
+    collection_info = client.get_collection(collection_name=settings.collection_name)
+    return {
+        "search_count": search_count,
+        "document_count": collection_info.points_count,
+    }
