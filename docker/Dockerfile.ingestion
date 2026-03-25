@@ -1,0 +1,17 @@
+FROM python:3.12-alpine
+
+WORKDIR /app
+
+RUN apk add uv --no-cache
+
+COPY pyproject.toml .
+COPY uv.lock .
+COPY config/ ./config/
+COPY ingestion.py .
+
+RUN uv sync --no-dev --frozen
+
+ENV QDRANT_URL=http://qdrant:6333
+ENV EMBEDDING_BASE_URL=http://ollama-embeddings:11434
+
+CMD ["sleep", "infinity"]
