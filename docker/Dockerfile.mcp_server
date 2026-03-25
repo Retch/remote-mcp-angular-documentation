@@ -1,0 +1,20 @@
+FROM python:3.12-alpine
+
+WORKDIR /app
+
+RUN apk add uv --no-cache
+
+COPY pyproject.toml .
+COPY uv.lock .
+COPY config.toml .
+COPY mcp_server.py .
+COPY modules/ ./modules/
+COPY type_definitions/ ./type_definitions/
+
+RUN uv sync --no-dev --frozen
+
+CMD ["uv", "run", "fastmcp", "run", "mcp_server.py:mcp", "--transport", "http", "--port", "8000", "--host", "0.0.0.0"]
+
+EXPOSE 8000
+
+STOPSIGNAL SIGKILL

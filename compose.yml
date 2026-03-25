@@ -23,6 +23,12 @@ services:
       - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
+  angular-docs-mcp:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.mcp_server
+    ports:
+      - "8000:8000"
 
 volumes:
   ollama_embeddings_data:
