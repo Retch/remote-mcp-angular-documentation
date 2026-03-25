@@ -8,6 +8,7 @@ COPY pyproject.toml .
 COPY uv.lock .
 COPY config/ ./config/
 COPY ingestion.py .
+COPY llms-full.txt .
 
 RUN uv sync --no-dev --frozen
 
@@ -15,3 +16,5 @@ ENV QDRANT_URL=http://qdrant:6333
 ENV EMBEDDING_BASE_URL=http://ollama-embeddings:11434
 
 CMD ["sleep", "infinity"]
+
+STOPSIGNAL SIGKILL
