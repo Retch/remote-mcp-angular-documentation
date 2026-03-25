@@ -9,6 +9,7 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-ollama>=1.0.1",
     "pydantic>=2.12.5",
+    "pydantic-settings>=2.8.3",
     "qdrant-client>=1.17.1",
     "structlog>=25.5.0",
     "tqdm>=4.67.3",

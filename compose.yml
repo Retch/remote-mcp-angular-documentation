@@ -28,7 +28,10 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile.mcp_server
     ports:
-      - "8000:8000"
+      - "8001:8000"
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - EMBEDDING_BASE_URL=http://ollama-embeddings:11434
 
 volumes:
   ollama_embeddings_data:

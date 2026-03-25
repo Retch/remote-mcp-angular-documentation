@@ -12,24 +12,21 @@ from qdrant_client.models import (
 import structlog
 from tqdm import tqdm
 from datetime import datetime, UTC
-import tomllib
+from config import settings
 
-with open("config.toml", "rb") as f:
-    config = tomllib.load(f)
-
-qdrant = QdrantClient(url=config["QDRANT"]["url"])
-collection_name = config["QDRANT"]["collection_name"]
+qdrant = QdrantClient(url=settings.qdrant_url)
+collection_name = settings.collection_name
 log = structlog.get_logger()
-source_file = config["DOCUMENT_PROCESSING"]["source_file"]
+source_file = settings.source_file
 loader = TextLoader(source_file)
 docs = loader.load()
 embeddings_model = OllamaEmbeddings(
-    model=config["EMBEDDING"]["model"], base_url=config["EMBEDDING"]["base_url"]
+    model=settings.embedding_model, base_url=settings.embedding_base_url
 )
 markdown_splitter = RecursiveCharacterTextSplitter.from_language(
     language=Language.MARKDOWN,
-    chunk_size=config["DOCUMENT_PROCESSING"]["chunk_size"],
-    chunk_overlap=config["DOCUMENT_PROCESSING"]["chunk_overlap"],
+    chunk_size=settings.chunk_size,
+    chunk_overlap=settings.chunk_overlap,
 )
 existing_collections = qdrant.get_collections().collections
 collection_names = [c.name for c in existing_collections]

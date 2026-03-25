@@ -1,11 +1,8 @@
 from fastmcp import FastMCP
-import modules.retrieval as Retriever
-from type_definitions.retrieved_doc import RetrievedDoc
 import structlog
-import tomllib
-
-with open("config.toml", "rb") as f:
-    config = tomllib.load(f)
+from config import settings
+from modules import retrieval as Retriever
+from type_definitions.retrieved_doc import RetrievedDoc
 
 log = structlog.get_logger()
 mcp = FastMCP("Angular Documentation MCP Server")
@@ -20,4 +17,4 @@ def search_docs(query: str) -> list[str]:
     return [t.text for t in retrieved_docs]
 
 if __name__ == "__main__":
-    mcp.run(transport="http", port=config["MCPSERVER"]["port"])
+    mcp.run(transport="http", port=settings.fastmcp_port)
