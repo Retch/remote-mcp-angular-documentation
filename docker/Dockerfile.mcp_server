@@ -6,12 +6,14 @@ RUN apk add uv --no-cache
 
 COPY pyproject.toml .
 COPY uv.lock .
+
+RUN uv sync --no-dev --frozen
+
 COPY config/ ./config/
 COPY mcp_server.py .
 COPY modules/ ./modules/
 COPY type_definitions/ ./type_definitions/
 
-RUN uv sync --no-dev --frozen
 
 ENV QDRANT_URL=http://qdrant:6333
 ENV EMBEDDING_BASE_URL=http://ollama-embeddings:11434
