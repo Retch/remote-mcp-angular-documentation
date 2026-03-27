@@ -34,6 +34,9 @@ services:
     environment:
       - QDRANT_URL=http://qdrant:6333
       - EMBEDDING_BASE_URL=http://ollama-embeddings:11434
+    depends_on:
+      - qdrant
+      - ollama-embeddings
   angular-docs-ingestion:
     build:
       context: .
