@@ -9,6 +9,8 @@ COPY uv.lock .
 
 RUN uv sync --no-dev --frozen
 
+ENV UV_NO_SYNC=1
+
 COPY config/ ./config/
 COPY mcp_server.py .
 COPY modules/ ./modules/
