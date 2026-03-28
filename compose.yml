@@ -45,6 +45,11 @@ services:
     environment:
       - QDRANT_URL=http://qdrant:6333
       - EMBEDDING_BASE_URL=http://ollama-embeddings:11434
+    depends_on:
+      - qdrant
+      - ollama-embeddings
+    volumes:
+      - "./llms-full:/app/llms-full:ro,Z"
 
 volumes:
   ollama_embeddings_data:
