@@ -30,7 +30,7 @@ services:
       dockerfile: ./docker/Dockerfile.mcp_server
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8001:8000"
+      - "127.0.0.1:8860:8000"
     environment:
       - QDRANT_URL=http://qdrant:6333
       - EMBEDDING_BASE_URL=http://ollama-embeddings:11434
